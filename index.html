@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GoPrep AI — Persiapan IELTS & AI Tutor Gratis</title>
+<script src="https://js.puter.com/v2/"></script>
+<style>
+:root{
+  --coral:#FF6B5B;--coral-d:#E8544A;--coral-l:#FF8A7A;
+  --ink:#1A1A2E;--ink2:#16213E;--bg:#FFF9F7;--card:#FFFFFF;
+  --mut:#6B7280;--ok:#10B981;--line:#FFE4DE;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6}
+a{color:inherit;text-decoration:none}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:14px 28px;border-radius:12px;font-weight:700;font-size:16px;border:none;cursor:pointer;transition:.25s;text-align:center}
+.btn-p{background:var(--coral);color:#fff;box-shadow:0 4px 20px rgba(255,107,91,.35)}
+.btn-p:hover{background:var(--coral-d);transform:translateY(-2px);box-shadow:0 8px 28px rgba(255,107,91,.45)}
+.btn-g{background:#fff;color:var(--ink);border:2px solid var(--line)}
+.btn-g:hover{border-color:var(--coral);color:var(--coral)}
+.nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(255,249,247,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);padding:0 24px}
+.nav-in{max-width:1200px;margin:auto;display:flex;align-items:center;justify-content:space-between;height:64px}
+.logo{font-size:22px;font-weight:900;color:var(--coral);letter-spacing:-.5px}
+.logo span{color:var(--ink)}
+.nav-links{display:flex;gap:28px;font-size:15px;font-weight:600}
+.nav-links a{color:var(--mut);transition:.2s}
+.nav-links a:hover{color:var(--coral)}
+.nav-cta{display:flex;gap:10px;align-items:center}
+.hero{padding:120px 24px 60px;max-width:1200px;margin:auto;text-align:center}
+.badge{display:inline-flex;align-items:center;gap:8px;background:#FFF0ED;color:var(--coral-d);padding:8px 18px;border-radius:99px;font-size:14px;font-weight:700;margin-bottom:24px}
+.hero h1{font-size:clamp(36px,6vw,64px);font-weight:900;line-height:1.1;letter-spacing:-2px;margin-bottom:20px}
+.hero h1 em{color:var(--coral);font-style:normal}
+.hero p{font-size:19px;color:var(--mut);max-width:640px;margin:0 auto 36px}
+.hero-cta{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+.stats{display:flex;gap:48px;justify-content:center;margin-top:56px;flex-wrap:wrap}
+.stat b{display:block;font-size:36px;font-weight:900;color:var(--coral)}
+.stat span{font-size:14px;color:var(--mut);font-weight:600}
+.sec{padding:72px 24px;max-width:1200px;margin:auto}
+.sec-h{text-align:center;margin-bottom:48px}
+.sec-h h2{font-size:clamp(28px,4vw,42px);font-weight:900;letter-spacing:-1px}
+.sec-h p{color:var(--mut);font-size:17px;margin-top:10px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:28px;transition:.25s}
+.card:hover{transform:translateY(-4px);box-shadow:0 12px 32px rgba(255,107,91,.12);border-color:var(--coral-l)}
+.card .ic{width:52px;height:52px;border-radius:14px;background:#FFF0ED;display:flex;align-items:center;justify-content:center;font-size:26px;margin-bottom:16px}
+.card h3{font-size:18px;font-weight:800;margin-bottom:8px}
+.card p{font-size:15px;color:var(--mut)}
+.dark{background:var(--ink);color:#fff;border-radius:24px;margin:0 24px;max-width:1200px;margin:auto;padding:64px 40px}
+.dark .sec-h p{color:#9CA3AF}
+.chatbox{background:#0F172A;border:1px solid #1E293B;border-radius:20px;overflow:hidden;max-width:860px;margin:0 auto;box-shadow:0 24px 64px rgba(0,0,0,.4)}
+.chat-top{display:flex;align-items:center;gap:12px;padding:16px 20px;background:#1E293B;border-bottom:1px solid #334155}
+.chat-av{width:42px;height:42px;border-radius:50%;background:var(--coral);display:flex;align-items:center;justify-content:center;font-size:20px}
+.chat-top b{color:#fff;font-size:15px;display:block}
+.chat-top small{color:#94A3B8;font-size:12px}
+.online{width:8px;height:8px;background:#10B981;border-radius:50%;display:inline-block;margin-right:4px;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.chat-log{height:420px;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:14px;scroll-behavior:smooth}
+.msg{max-width:78%;padding:12px 16px;border-radius:16px;font-size:15px;line-height:1.55;animation:in .3s ease}
+@keyframes in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.msg.u{align-self:flex-end;background:var(--coral);color:#fff;border-bottom-right-radius:4px}
+.msg.a{align-self:flex-start;background:#1E293B;color:#E2E8F0;border-bottom-left-radius:4px}
+.msg.a strong{color:var(--coral-l)}
+.typing{align-self:flex-start;background:#1E293B;padding:14px 18px;border-radius:16px;display:flex;gap:5px}
+.typing i{width:8px;height:8px;background:#64748B;border-radius:50%;animation:blink 1.2s infinite}
+.typing i:nth-child(2){animation-delay:.2s}.typing i:nth-child(3){animation-delay:.4s}
+@keyframes blink{0%,80%,100%{opacity:.3;transform:scale(.8)}40%{opacity:1;transform:scale(1)}}
+.chat-in{display:flex;gap:10px;padding:14px;background:#0F172A;border-top:1px solid #1E293B}
+.chat-in input{flex:1;background:#1E293B;border:1px solid #334155;border-radius:12px;padding:14px 18px;color:#fff;font-size:15px;outline:none;transition:.2s}
+.chat-in input:focus{border-color:var(--coral)}
+.chat-in button{background:var(--coral);border:none;border-radius:12px;width:50px;height:50px;font-size:20px;cursor:pointer;transition:.2s;color:#fff}
+.chat-in button:hover{background:var(--coral-d)}
+.chips{display:flex;gap:8px;flex-wrap:wrap;padding:0 20px 14px;background:#0F172A}
+.chip{background:#1E293B;border:1px solid #334155;color:#94A3B8;padding:7px 14px;border-radius:99px;font-size:13px;cursor:pointer;transition:.2s}
+.chip:hover{border-color:var(--coral);color:var(--coral)}
+.voicebox{background:#0F172A;border:1px solid #1E293B;border-radius:20px;max-width:560px;margin:0 auto;padding:36px 24px 28px;text-align:center;box-shadow:0 24px 64px rgba(0,0,0,.4);position:relative;overflow:hidden}
+.v-stage{position:relative;width:140px;height:140px;margin:0 auto 18px}
+.v-ring{position:absolute;inset:0;border-radius:50%;border:3px solid rgba(255,107,91,.25);transition:.3s}
+.v-avatar{position:absolute;inset:14px;border-radius:50%;background:linear-gradient(135deg,#FF6B5B,#FF8A7A);display:flex;align-items:center;justify-content:center;font-size:52px;box-shadow:0 8px 32px rgba(255,107,91,.4);transition:.3s;user-select:none}
+.v-waves{position:absolute;left:50%;bottom:-6px;transform:translateX(-50%);display:none;gap:4px;align-items:flex-end;height:22px}
+.v-waves i{width:5px;background:var(--coral);border-radius:3px;animation:wv .8s ease-in-out infinite}
+.v-waves i:nth-child(1){height:8px;animation-delay:0s}
+.v-waves i:nth-child(2){height:16px;animation-delay:.12s}
+.v-waves i:nth-child(3){height:22px;animation-delay:.24s}
+.v-waves i:nth-child(4){height:14px;animation-delay:.36s}
+.v-waves i:nth-child(5){height:9px;animation-delay:.48s}
+@keyframes wv{0%,100%{transform:scaleY(.4)}50%{transform:scaleY(1)}}
+.voicebox.listening .v-ring{border-color:var(--coral);animation:pulsering 1.4s ease-out infinite}
+.voicebox.listening .v-avatar{transform:scale(1.05);box-shadow:0 8px 48px rgba(255,107,91,.7)}
+.voicebox.listening .v-waves{display:flex}
+.voicebox.thinking .v-avatar{animation:shake .6s ease-in-out infinite}
+.voicebox.speaking .v-ring{border-color:#10B981;animation:pulsering 1.2s ease-out infinite}
+.voicebox.speaking .v-avatar{box-shadow:0 8px 48px rgba(16,185,129,.6)}
+.voicebox.speaking .v-waves{display:flex}
+.voicebox.speaking .v-waves i{background:#10B981}
+@keyframes pulsering{0%{transform:scale(1);opacity:1}100%{transform:scale(1.35);opacity:0}}
+@keyframes shake{0%,100%{transform:rotate(0)}25%{transform:rotate(-3deg)}75%{transform:rotate(3deg)}}
+.v-status{color:#E2E8F0;font-size:16px;font-weight:700;margin-bottom:6px;min-height:24px}
+.v-live{color:#94A3B8;font-size:14px;min-height:22px;margin-bottom:16px;font-style:italic}
+.v-mic{width:84px;height:84px;border-radius:50%;border:none;background:var(--coral);color:#fff;font-size:36px;cursor:pointer;transition:.25s;box-shadow:0 8px 28px rgba(255,107,91,.45);margin:0 auto;display:block}
+.v-mic:hover{transform:scale(1.06)}
+.voicebox.listening .v-mic{background:#DC2626;animation:micpulse 1.2s ease-in-out infinite;box-shadow:0 8px 28px rgba(220,38,38,.5)}
+.voicebox.speaking .v-mic{background:#10B981;box-shadow:0 8px 28px rgba(16,185,129,.5)}
+.voicebox.thinking .v-mic{background:#64748B;cursor:wait}
+@keyframes micpulse{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+.v-hint{color:#64748B;font-size:12px;margin-top:14px}
+.v-auto{display:flex;align-items:center;justify-content:center;gap:8px;color:#94A3B8;font-size:13px;margin-top:14px;cursor:pointer;user-select:none}
+.v-auto input{accent-color:var(--coral);width:16px;height:16px;cursor:pointer}
+.v-err{background:#7F1D1D;color:#FECACA;padding:10px 14px;border-radius:10px;font-size:13px;margin-top:12px;display:none}
+.tools{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.tool{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px;cursor:pointer;transition:.2s}
+.tool:hover{border-color:var(--coral);box-shadow:0 8px 24px rgba(255,107,91,.1)}
+.tool h4{font-weight:800;margin-bottom:6px;font-size:16px}
+.tool p{font-size:14px;color:var(--mut)}
+.calc{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:32px;max-width:560px;margin:0 auto}
+.calc label{display:block;font-weight:700;font-size:14px;margin:16px 0 6px}
+.calc select,.calc input{width:100%;padding:12px 16px;border:2px solid var(--line);border-radius:10px;font-size:15px;outline:none;background:#fff}
+.calc select:focus,.calc input:focus{border-color:var(--coral)}
+.calc .res{margin-top:20px;padding:20px;background:#FFF0ED;border-radius:12px;text-align:center;font-size:18px;font-weight:800;color:var(--coral-d);display:none}
+.tst{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:28px}
+.tst p{font-size:15px;color:var(--mut);margin:12px 0;font-style:italic}
+.tst b{font-size:15px}
+.tst .sc{color:var(--coral);font-weight:800;font-size:14px}
+.faq{max-width:720px;margin:0 auto}
+.qa{background:var(--card);border:1px solid var(--line);border-radius:14px;margin-bottom:12px;overflow:hidden}
+.qa summary{padding:18px 22px;font-weight:700;cursor:pointer;font-size:16px;list-style:none;display:flex;justify-content:space-between;align-items:center}
+.qa summary::after{content:"+";font-size:22px;color:var(--coral);transition:.2s}
+.qa[open] summary::after{content:"−"}
+.qa div{padding:0 22px 18px;color:var(--mut);font-size:15px}
+footer{background:var(--ink);color:#94A3B8;padding:48px 24px;text-align:center;margin-top:48px}
+footer .logo{margin-bottom:12px}
+footer p{font-size:14px}
+.mnav{display:none;position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--line);z-index:100;justify-content:space-around;padding:8px 0}
+.mnav a{display:flex;flex-direction:column;align-items:center;font-size:11px;font-weight:700;color:var(--mut);gap:2px;padding:4px 12px}
+.mnav a span{font-size:20px}
+.mnav a.on{color:var(--coral)}
+@media(max-width:768px){
+  .nav-links{display:none}
+  .mnav{display:flex}
+  .hero{padding:100px 20px 40px}
+  .stats{gap:28px}
+  .dark{margin:0 12px;padding:40px 20px}
+  .chat-log{height:360px}
+  body{padding-bottom:64px}
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-in">
+    <a href="#" class="logo">Go<span>Prep</span>.gg</a>
+    <div class="nav-links">
+      <a href="#platform">Platform</a>
+      <a href="#chat">AI Tutor</a>
+      <a href="#tools">Tools</a>
+      <a href="#guarantee">Jaminan</a>
+      <a href="#faq">FAQ</a>
+    </div>
+    <div class="nav-cta">
+      <a href="#chat" class="btn btn-p" style="padding:10px 22px;font-size:14px">Mulai Gratis</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="badge">🏆 EdTech Project of the Year 2026</div>
+  <h1>Capai skor IELTS yang kamu mau — <em>percobaan pertama</em></h1>
+  <p>AI prep untuk Academic &amp; General Training IELTS — 7 tools dalam satu platform. Tes mock, penilaian AI, dan Preppy — tutor AI suara yang ngobrol kayak manusia biasa.</p>
+  <div class="hero-cta">
+    <a href="#chat" class="btn btn-p">🚀 Coba AI Tutor Gratis</a>
+    <a href="#tools" class="btn btn-g">Lihat Tools Gratis</a>
+  </div>
+  <div class="stats">
+    <div class="stat"><b>700K+</b><span>Pengguna</span></div>
+    <div class="stat"><b>516K+</b><span>Mock Tests</span></div>
+    <div class="stat"><b>188K+</b><span>Esai Dinilai</span></div>
+    <div class="stat"><b>140</b><span>Negara</span></div>
+  </div>
+</header>
+
+<section class="sec" id="platform">
+  <div class="sec-h">
+    <h2>Lihat Isi Platform</h2>
+    <p>Semua yang kamu butuhkan untuk IELTS — dari latihan sampai AI feedback</p>
+  </div>
+  <div class="grid">
+    <div class="card"><div class="ic">🤖</div><h3>Preppy AI</h3><p>Tutor AI suara yang ngobrol natural kayak manusia. Latihan Speaking kapan aja tanpa booking tutor.</p></div>
+    <div class="card"><div class="ic">📋</div><h3>Rencana Harian</h3><p>Adaptive plan berdasarkan tanggal tes &amp; kelemahan skill kamu. Buka app, ikuti, selesai.</p></div>
+    <div class="card"><div class="ic">📝</div><h3>Mock Tests</h3><p>80+ tes mock per skill, format komputer persis seperti tes asli IELTS.</p></div>
+    <div class="card"><div class="ic">✨</div><h3>Feedback Detail</h3><p>Penilaian Writing &amp; Speaking oleh AI sesuai 4 kriteria resmi IELTS, lengkap dengan catatan perbaikan.</p></div>
+    <div class="card"><div class="ic">📊</div><h3>Statistik</h3><p>Pantau progres skill per skill. Lihat tren band score dari waktu ke waktu.</p></div>
+    <div class="card"><div class="ic">🎮</div><h3>Games</h3><p>IELTS Runner, Speak or Die, Speaking Challenge — latihan sambil seru.</p></div>
+    <div class="card"><div class="ic">📚</div><h3>Vocabulary</h3><p>Flashcard spaced repetition — kata baru otomatis muncul lagi untuk review.</p></div>
+    <div class="card"><div class="ic">🎯</div><h3>Exam Mode</h3><p>Simulasi kondisi tes sesungguhnya: timer, navigasi section, tekanan waktu.</p></div>
+  </div>
+</section>
+
+<div class="dark" id="chat">
+  <div class="sec-h">
+    <h2 style="color:#fff">🎙️ Teleponan sama Preppy</h2>
+    <p>Tekan mic, ngomong langsung — Preppy dengerin dan balas pake suara. Kayak teleponan sama tutor, bukan ketik-ketik.</p>
+  </div>
+  <div class="voicebox" id="vBox">
+    <div class="v-stage">
+      <div class="v-ring"></div>
+      <div class="v-avatar">🎓</div>
+      <div class="v-waves"><i></i><i></i><i></i><i></i><i></i></div>
+    </div>
+    <div class="v-status" id="vStatus">Tekan tombol mic buat mulai ngobrol</div>
+    <div class="v-live" id="vLive"></div>
+    <button class="v-mic" id="vMic" onclick="toggleVoice()" aria-label="Mic">🎤</button>
+    <div class="v-hint" id="vHint">Izin mikrofon diminta saat pertama kali · Bicara Indonesia atau English</div>
+    <label class="v-auto"><input type="checkbox" id="vAuto" checked> Lanjut otomatis setelah Preppy selesai ngomong</label>
+    <div class="v-err" id="vErr"></div>
+  </div>
+  <div class="chat-log" id="log" style="max-width:560px;margin:16px auto 0;background:#0F172A;border:1px solid #1E293B;border-radius:16px">
+    <div class="msg a">Hai! Gue Preppy 👋 Tekan mic terus ngomong aja, gue dengerin dan jawab pake suara.</div>
+  </div>
+  <div class="chips" id="chips" style="max-width:560px;margin:0 auto;justify-content:center">
+    <span class="chip" onclick="quick('Latihan Speaking: describe your hometown')">🎤 Latihan Speaking</span>
+    <span class="chip" onclick="quick('Kita latihan interview kerja bahasa Inggris yuk')">💼 Interview Practice</span>
+    <span class="chip" onclick="quick('Beri aku 5 topik Speaking IELTS acak')">📋 Topik Speaking</span>
+  </div>
+  <div class="chat-in" style="max-width:560px;margin:0 auto;border-radius:0 0 16px 16px;border:1px solid #1E293B;border-top:none">
+    <input type="text" id="inp" placeholder="…atau ketik di sini kalau lagi di tempat ramai" autocomplete="off" onkeydown="if(event.key==='Enter')send()">
+    <button onclick="send()" aria-label="Kirim">➤</button>
+  </div>
+</div>
+
+<section class="sec" id="tools">
+  <div class="sec-h">
+    <h2>🛠️ Tools Gratis</h2>
+    <p>Kalkulator &amp; generator — langsung pakai, tanpa daftar akun</p>
+  </div>
+  <div class="tools" style="margin-bottom:32px">
+    <div class="tool" onclick="showCalc()"><h4>🧮 Band Score Calculator</h4><p>Hitung overall band dari 4 skill kamu</p></div>
+    <div class="tool" onclick="quick('Beri aku 5 topik Speaking IELTS acak')"><h4>🎤 Speaking Topic Generator</h4><p>Topik latihan Speaking acak</p></div>
+    <div class="tool" onclick="quick('Beri aku 5 topik Writing Task 2 acak')"><h4>✍️ Writing Topic Generator</h4><p>Topik Writing Task 2 acak</p></div>
+    <div class="tool" onclick="quick('Konversi band IELTS ke TOEFL, PTE, Duolingo, dan CEFR')"><h4>🔁 Score Converter</h4><p>IELTS ↔ TOEFL / PTE / Duolingo</p></div>
+  </div>
+  <div class="calc" id="calcBox" style="display:none">
+    <h3 style="font-weight:900;font-size:20px">Band Score Calculator</h3>
+    <label>Listening</label><select id="cL"><option>0</option><option>0.5</option><option>1</option><option>1.5</option><option>2</option><option>2.5</option><option>3</option><option>3.5</option><option>4</option><option>4.5</option><option>5</option><option>5.5</option><option>6</option><option>6.5</option><option>7</option><option>7.5</option><option>8</option><option>8.5</option><option>9</option></select>
+    <label>Reading</label><select id="cR"><option>0</option><option>0.5</option><option>1</option><option>1.5</option><option>2</option><option>2.5</option><option>3</option><option>3.5</option><option>4</option><option>4.5</option><option>5</option><option>5.5</option><option>6</option><option>6.5</option><option>7</option><option>7.5</option><option>8</option><option>8.5</option><option>9</option></select>
+    <label>Writing</label><select id="cW"><option>0</option><option>0.5</option><option>1</option><option>1.5</option><option>2</option><option>2.5</option><option>3</option><option>3.5</option><option>4</option><option>4.5</option><option>5</option><option>5.5</option><option>6</option><option>6.5</option><option>7</option><option>7.5</option><option>8</option><option>8.5</option><option>9</option></select>
+    <label>Speaking</label><select id="cS"><option>0</option><option>0.5</option><option>1</option><option>1.5</option><option>2</option><option>2.5</option><option>3</option><option>3.5</option><option>4</option><option>4.5</option><option>5</option><option>5.5</option><option>6</option><option>6.5</option><option>7</option><option>7.5</option><option>8</option><option>8.5</option><option>9</option></select>
+    <button class="btn btn-p" style="width:100%;margin-top:20px;justify-content:center" onclick="hitung()">Hitung Overall</button>
+    <div class="res" id="res"></div>
+  </div>
+</section>
+
+<section class="sec" id="guarantee">
+  <div class="sec-h">
+    <h2>🛡️ Double Result Guarantee</h2>
+    <p>Skor naik, atau kami refund dan tutup biaya retake kamu</p>
+  </div>
+  <div class="grid">
+    <div class="tst">
+      <div class="sc">⭐⭐⭐⭐⭐</div>
+      <p>"Dapat 7.5 di percobaan pertama setelah cuma 6 minggu prep. Speaking yang paling ditakutkan — di sini tiap hari latihan sama AI, pas tes asli gak gugup."</p>
+      <b>Aigerim — Almaty</b><br><span style="color:var(--coral);font-weight:700;font-size:14px">IELTS 7.5</span>
+    </div>
+    <div class="tst">
+      <div class="sc">⭐⭐⭐⭐⭐</div>
+      <p>"Awalnya pikir subscription doang. Dua minggu kemudian berubah pikiran — feedback esai lebih detail dari tutor $300/bulan gue."</p>
+      <b>Timur — Tashkent</b><br><span style="color:var(--coral);font-weight:700;font-size:14px">IELTS 7.5</span>
+    </div>
+    <div class="tst">
+      <div class="sc">⭐⭐⭐⭐⭐</div>
+      <p>"Gak nyangka AI nulis skoring Writing seakurat itu. Bandingkan sama tes asli sebelumnya — cuma beda 0.5. Beneran work."</p>
+      <b>Bekzat — Astana</b><br><span style="color:var(--coral);font-weight:700;font-size:14px">IELTS 6.5</span>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="faq">
+  <div class="sec-h">
+    <h2>Pertanyaan Umum</h2>
+    <p>Jawaban cepat sebelum kamu mulai</p>
+  </div>
+  <div class="faq">
+    <details class="qa" open><summary>Bedanya sama platform IELTS lain?</summary><div>GoPrep punya 80+ mock test per skill dengan format komputer asli, penilaian AI Writing &amp; Speaking sesuai kriteria resmi, adaptive daily plan, dan Preppy — tutor AI suara yang ngobrol natural. Semua dalam satu app.</div></details>
+    <details class="qa"><summary>Apa yang dicakup Double Guarantee?</summary><div>Naik minimal 1.0 band overall dalam tes IELTS resmi pertama setelah program — atau kami refund 100% langganan + tutup biaya retake.</div></details>
+    <details class="qa"><summary>Tools gratis butuh akun?</summary><div>Tidak. Kalkulator, generator topik, dan converter langsung jalan di browser — tanpa daftar, tanpa email.</div></details>
+    <details class="qa"><summary>Bisa cancel langganan kapan aja?</summary><div>Bisa. Cancel kapan aja dari settings, akses tetap aktif sampai periode berjalan selesai.</div></details>
+    <details class="qa"><summary>Preppy AI itu beneran bisa ngomong?</summary><div>Ya! Preppy adalah AI tutor suara — kamu bisa latihan Speaking dengan ngomong langsung, dan dia balas kayak manusia biasa. Buat latihan Writing juga bisa, lengkap dengan feedback skor.</div></details>
+  </div>
+</section>
+
+<footer>
+  <div class="logo">Go<span style="color:#fff">Prep</span>.gg</div>
+  <p>Platform persiapan IELTS bertenaga AI. Bukan afiliasi resmi IELTS/IDP/British Council.</p>
+  <p style="margin-top:8px;font-size:13px">© 2026 GoPrep — dibuat dengan ❤️</p>
+</footer>
+
+<nav class="mnav">
+  <a href="#" class="on"><span>🏠</span>Beranda</a>
+  <a href="#chat"><span>🎙️</span>Voice AI</a>
+  <a href="#tools"><span>🛠️</span>Tools</a>
+  <a href="#faq"><span>❓</span>FAQ</a>
+</nav>
+
+<script>
+const log=document.getElementById('log'),inp=document.getElementById('inp');
+const HIST=[];
+const SYS=`Kamu adalah "Preppy", teman ngobrol sekaligus tutor IELTS. Kamu BUKAN asisten AI, BUKAN ChatGPT.
+Identitas: namamu Preppy, kamu bagian dari platform GoPrep.gg.
+Aturan bicara:
+- Bahasa Indonesia santai (atau English kalau user pakai English), 1-3 kalimat per balasan.
+- Gaya temen: "gue/kamu", "nih", "dong", "banget", emoji seperlunya.
+- DILARANG keras: menyebut diri AI, ChatGPT, GPT, model bahasa, asisten, atau "Bagaimana saya bisa membantu". Kalau ditanya siapa kamu: "Gue Preppy, tutor IELTS kamu di GoPrep!" 
+- JANGAN pakai bullet point/daftar kecuali user minta.
+- Reaktif: tanggapi isi pesan dulu, baru lanjut. Kadang tanya 1 hal biar obrolan hidup.
+- Latihan IELTS: kasih feedback jujur + contoh perbaikan, tetap santai.
+- Kalau user singkat, kamu singkat. Kalau user semangat, ikut semangat.`;
+
+let busy=false;
+function addMsg(t,who){
+  const d=document.createElement('div');
+  d.className='msg '+who;
+  d.innerHTML=t;
+  log.appendChild(d);
+  log.scrollTop=log.scrollHeight;
+  return d;
+}
+function typing(){
+  const d=document.createElement('div');
+  d.className='typing';d.id='typing';
+  d.innerHTML='<i></i><i></i><i></i>';
+  log.appendChild(d);log.scrollTop=log.scrollHeight;
+}
+function rmTyping(){const t=document.getElementById('typing');if(t)t.remove()}
+
+function quick(t){inp.value=t;send()}
+
+// ── VOICE: state machine ──
+const vBox=document.getElementById('vBox'),vStatus=document.getElementById('vStatus'),
+      vLive=document.getElementById('vLive'),vMic=document.getElementById('vMic'),
+      vErr=document.getElementById('vErr'),vAuto=document.getElementById('vAuto');
+let vState='idle',rec=null,voices=[];
+const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+
+function setV(s,txt,live){
+  vState=s;
+  vBox.className='voicebox'+(s==='idle'?'':' '+s);
+  if(txt)vStatus.textContent=txt;
+  vLive.textContent=live||'';
+  vMic.textContent=s==='listening'?'⏹':(s==='speaking'?'🔊':'🎤');
+  vErr.style.display='none';
+}
+function vErrShow(t){vErr.textContent='⚠️ '+t;vErr.style.display='block'}
+
+function loadVoices(){
+  voices=window.speechSynthesis?speechSynthesis.getVoices():[];
+}
+if(window.speechSynthesis){loadVoices();speechSynthesis.onvoiceschanged=loadVoices}
+
+function pickVoice(){
+  return voices.find(v=>/^id[-_]/i.test(v.lang))||
+         voices.find(v=>/indonesia/i.test(v.lang))||
+         voices.find(v=>/^en[-_]/i.test(v.lang))||voices[0]||null;
+}
+
+function speak(text){
+  return new Promise(res=>{
+    if(!window.speechSynthesis){res();return}
+    speechSynthesis.cancel();
+    const clean=String(text).replace(/[*#`_>\[\]()]/g,'').replace(/\n+/g,'. ').trim();
+    if(!clean){res();return}
+    const u=new SpeechSynthesisUtterance(clean);
+    const v=pickVoice();
+    if(v)u.voice=v;
+    u.lang=(v&&v.lang)||'id-ID';
+    u.rate=1.02;u.pitch=1.05;
+    let done=false;
+    const fin=()=>{if(done)return;done=true;res()};
+    u.onend=fin;u.onerror=fin;
+    setTimeout(fin,Math.min(30000,2000+clean.length*90));
+    setV('speaking','Preppy lagi ngomong…');
+    speechSynthesis.speak(u);
+  });
+}
+
+function toggleVoice(){
+  if(vState==='listening'){if(rec)rec.stop();return}
+  if(vState==='thinking'||vState==='speaking')return;
+  if(!SR){
+    vErrShow('Browser kamu belum dukung voice. Pakai Chrome terbaru ya. Ketik aja di bawah.');
+    return;
+  }
+  startRec();
+}
+
+function startRec(){
+  try{if(window.speechSynthesis)speechSynthesis.cancel()}catch(_){}
+  if(!rec){
+    rec=new SR();
+    rec.lang='id-ID';
+    rec.interimResults=true;
+    rec.maxAlternatives=1;
+    rec.onstart=()=>setV('listening','Mendengarkan… ngomong aja','"…"');
+    rec.onresult=(e)=>{
+      let interim='',final='';
+      for(let i=e.resultIndex;i<e.results.length;i++){
+        const t=e.results[i][0].transcript;
+        if(e.results[i].isFinal)final+=t;else interim+=t;
+      }
+      vLive.textContent=final||interim||'…';
+      if(final.trim()){
+        vLive.textContent='';
+        handleVoice(final.trim());
+      }
+    };
+    rec.onerror=(e)=>{
+      if(e.error==='not-allowed'||e.error==='service-not-allowed'){
+        vErrShow('Izin mikrofon ditolak. Izinkan di pengaturan browser, lalu refresh.');
+        setV('idle','Tekan tombol mic buat mulai ngobrol');
+      }else if(e.error==='no-speech'){
+        setV('idle','Gak kedengeran suara — coba tekan mic lagi');
+      }else if(e.error!=='aborted'){
+        vErrShow('Mic error: '+e.error+'. Coba lagi.');
+        setV('idle','Tekan tombol mic buat mulai ngobrol');
+      }else{
+        setV('idle','Tekan tombol mic buat mulai ngobrol');
+      }
+    };
+    rec.onend=()=>{
+      if(vState==='listening')setV('idle','Tekan tombol mic buat mulai ngobrol');
+    };
+  }
+  try{rec.start()}catch(_){setV('idle','Tekan tombol mic buat mulai ngobrol')}
+}
+
+async function handleVoice(text){
+  if(busy)return;
+  await send(text,true);
+}
+
+async function send(voiceText,speakIt){
+  let t;
+  if(typeof voiceText==='string'){t=voiceText.trim();}
+  else{t=inp.value.trim();}
+  if(!t||busy)return;
+  busy=true;
+  if(typeof voiceText!=='string')inp.value='';
+  addMsg(esc(t),'u');
+  HIST.push({role:'user',content:t});
+  if(!speakIt)typing();
+  if(speakIt)setV('thinking','Preppy mikir…');
+  try{
+    const msgs=[{role:'system',content:SYS},...HIST.slice(-14)];
+    let r=null,waitSec=0;
+    for(let attempt=0;attempt<3&&!r;attempt++){
+      if(attempt>0){
+        const w=Math.max(waitSec,5);
+        if(speakIt){setV('thinking','nunggu '+w+' detik biar AI lega…')}
+        else{setTypingTxt('nunggu '+w+' detik biar AI lega…');}
+        await sleep(w*1000);
+        if(!speakIt)typing();
+      }
+      const out=await callPollinations(msgs);
+      if(out&&out.r)r=out.r;
+      else if(out&&out.wait)waitSec=out.wait;
+      else break;
+    }
+    if(!r&&window.puter&&puter.ai&&puter.ai.chat){
+      if(speakIt)setV('thinking','coba jalur cadangan…');
+      else setTypingTxt('coba jalur cadangan…');
+      try{
+        let p=await puter.ai.chat(msgs,{model:'gpt-4o-mini'});
+        if(p&&typeof p==='object'){
+          p=p.message&&p.message.content?p.message.content:(p.text||p.content||String(p));
+        }
+        if(p)r=p;
+      }catch(_){}
+    }
+    if(!r)throw new Error('AI lagi sibuk — tunggu ±30 detik terus coba lagi ya.');
+    rmTyping();
+    const el=addMsg('','a');
+    const rTxt=String(r);
+    await typeOut(el,rTxt);
+    HIST.push({role:'assistant',content:rTxt});
+    await speak(rTxt);
+    if(speakIt){
+      if(vAuto.checked){
+        setV('idle','lanjut ngobrol… tekan mic atau ngomong lagi');
+        await sleep(350);
+        if(vState==='idle')startRec();
+      }else{
+        setV('idle','Tekan tombol mic buat mulai ngobrol');
+      }
+    }else{
+      if(vState==='speaking')setV('idle','Tekan tombol mic buat mulai ngobrol');
+    }
+  }catch(e){
+    rmTyping();
+    addMsg('⚠️ '+esc(e.message||'AI lagi sibuk, coba lagi sebentar lagi.'),'a');
+    if(speakIt){
+      vErrShow(e.message||'AI lagi sibuk, coba lagi.');
+      setV('idle','Tekan tombol mic buat coba lagi');
+    }
+  }
+  busy=false;
+}
+function sleep(ms){return new Promise(r=>setTimeout(r,ms))}
+function setTypingTxt(t){
+  const el=document.getElementById('typing');
+  if(el)el.innerHTML='<span style="color:#94A3B8;font-size:13px">'+esc(t)+'</span>';
+}
+async function callPollinations(msgs){
+  try{
+    const ctl=new AbortController();
+    const to=setTimeout(()=>ctl.abort(),45000);
+    const res=await fetch('https://text.pollinations.ai/',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({messages:msgs,model:'openai',seed:Math.floor(Math.random()*99999),private:true}),
+      signal:ctl.signal
+    });
+    clearTimeout(to);
+    const txt=(await res.text()).trim();
+    if(/Free limit reached|FREE_LIMIT/i.test(txt)){
+      const m=txt.match(/wait (\d+) seconds/i)||txt.match(/Retry after (\d+)s/i);
+      return {wait:m?parseInt(m[1]):45};
+    }
+    if(!res.ok||!txt||txt.startsWith('{'))return null;
+    return {r:txt};
+  }catch(_){return null;}
+}
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+function md(s){
+  s=esc(s);
+  s=s.replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>');
+  s=s.replace(/\n/g,'<br>');
+  return s;
+}
+function typeOut(el,txt){
+  return new Promise(res=>{
+    let i=0;
+    const speed=txt.length>600?4:12;
+    const tick=()=>{
+      i+=Math.max(1,Math.floor(txt.length/80));
+      if(i>=txt.length)i=txt.length;
+      el.innerHTML=md(txt.slice(0,i));
+      log.scrollTop=log.scrollHeight;
+      if(i<txt.length)setTimeout(tick,speed);else res();
+    };
+    tick();
+  });
+}
+function hitung(){
+  const v=['cL','cR','cW','cS'].map(id=>parseFloat(document.getElementById(id).value));
+  const avg=v.reduce((a,b)=>a+b,0)/4;
+  const band=Math.round(avg*2)/2;
+  const r=document.getElementById('res');
+  r.style.display='block';
+  r.textContent='Overall Band: '+band.toFixed(1);
+}
+function showCalc(){
+  const c=document.getElementById('calcBox');
+  c.style.display=c.style.display==='none'?'block':'none';
+  if(c.style.display==='block')c.scrollIntoView({behavior:'smooth',block:'center'});
+}
+</script>
+</body>
+</html>
