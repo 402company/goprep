@@ -75,10 +75,10 @@ a{color:inherit;text-decoration:none}
 .chip{background:#1E293B;border:1px solid #334155;color:#94A3B8;padding:7px 14px;border-radius:99px;font-size:13px;cursor:pointer;transition:.2s}
 .chip:hover{border-color:var(--coral);color:var(--coral)}
 .voicebox{background:#0F172A;border:1px solid #1E293B;border-radius:20px;max-width:560px;margin:0 auto;padding:36px 24px 28px;text-align:center;box-shadow:0 24px 64px rgba(0,0,0,.4);position:relative;overflow:hidden}
-.v-stage{position:relative;width:140px;height:140px;margin:0 auto 18px}
-.v-ring{position:absolute;inset:0;border-radius:50%;border:3px solid rgba(255,107,91,.25);transition:.3s}
-.v-avatar{position:absolute;inset:14px;border-radius:50%;background:linear-gradient(135deg,#FF6B5B,#FF8A7A);display:flex;align-items:center;justify-content:center;font-size:52px;box-shadow:0 8px 32px rgba(255,107,91,.4);transition:.3s;user-select:none}
-.v-waves{position:absolute;left:50%;bottom:-6px;transform:translateX(-50%);display:none;gap:4px;align-items:flex-end;height:22px}
+.v-stage{position:relative;width:180px;height:200px;margin:0 auto 14px}
+.v-ring{position:absolute;left:50%;top:40px;transform:translateX(-50%);width:150px;height:150px;border-radius:50%;border:3px solid rgba(255,107,91,.25);transition:.3s;pointer-events:none}
+.v-person{position:absolute;left:50%;top:0;transform:translateX(-50%);width:180px;height:200px;transition:.3s;user-select:none;filter:drop-shadow(0 8px 24px rgba(0,0,0,.35))}
+.v-waves{position:absolute;left:50%;bottom:8px;transform:translateX(-50%);display:none;gap:4px;align-items:flex-end;height:22px;z-index:2}
 .v-waves i{width:5px;background:var(--coral);border-radius:3px;animation:wv .8s ease-in-out infinite}
 .v-waves i:nth-child(1){height:8px;animation-delay:0s}
 .v-waves i:nth-child(2){height:16px;animation-delay:.12s}
@@ -87,15 +87,21 @@ a{color:inherit;text-decoration:none}
 .v-waves i:nth-child(5){height:9px;animation-delay:.48s}
 @keyframes wv{0%,100%{transform:scaleY(.4)}50%{transform:scaleY(1)}}
 .voicebox.listening .v-ring{border-color:var(--coral);animation:pulsering 1.4s ease-out infinite}
-.voicebox.listening .v-avatar{transform:scale(1.05);box-shadow:0 8px 48px rgba(255,107,91,.7)}
+.voicebox.listening .v-person{transform:translateX(-50%) scale(1.03)}
 .voicebox.listening .v-waves{display:flex}
-.voicebox.thinking .v-avatar{animation:shake .6s ease-in-out infinite}
+.voicebox.thinking .v-person{animation:tilt 1.2s ease-in-out infinite}
 .voicebox.speaking .v-ring{border-color:#10B981;animation:pulsering 1.2s ease-out infinite}
-.voicebox.speaking .v-avatar{box-shadow:0 8px 48px rgba(16,185,129,.6)}
+.voicebox.speaking .v-person{transform:translateX(-50%) scale(1.02)}
 .voicebox.speaking .v-waves{display:flex}
 .voicebox.speaking .v-waves i{background:#10B981}
-@keyframes pulsering{0%{transform:scale(1);opacity:1}100%{transform:scale(1.35);opacity:0}}
-@keyframes shake{0%,100%{transform:rotate(0)}25%{transform:rotate(-3deg)}75%{transform:rotate(3deg)}}
+@keyframes pulsering{0%{transform:translateX(-50%) scale(1);opacity:1}100%{transform:translateX(-50%) scale(1.35);opacity:0}}
+@keyframes tilt{0%,100%{transform:translateX(-50%) rotate(0)}30%{transform:translateX(-50%) rotate(-3deg)}70%{transform:translateX(-50%) rotate(3deg)}}
+/* face parts */
+#mouthGroup{transform-origin:100px 130px;transition:transform .08s}
+#mouthClosed,#mouthOpen{transition:opacity .06s}
+#mouthOpen{opacity:0}
+#lidL,#lidR{transform-origin:center;transition:transform .08s}
+.face-blink #lidL,.face-blink #lidR{transform:scaleY(1)}
 .v-status{color:#E2E8F0;font-size:16px;font-weight:700;margin-bottom:6px;min-height:24px}
 .v-live{color:#94A3B8;font-size:14px;min-height:22px;margin-bottom:16px;font-style:italic}
 .v-mic{width:84px;height:84px;border-radius:50%;border:none;background:var(--coral);color:#fff;font-size:36px;cursor:pointer;transition:.25s;box-shadow:0 8px 28px rgba(255,107,91,.45);margin:0 auto;display:block}
@@ -108,6 +114,8 @@ a{color:inherit;text-decoration:none}
 .v-auto{display:flex;align-items:center;justify-content:center;gap:8px;color:#94A3B8;font-size:13px;margin-top:14px;cursor:pointer;user-select:none}
 .v-auto input{accent-color:var(--coral);width:16px;height:16px;cursor:pointer}
 .v-err{background:#7F1D1D;color:#FECACA;padding:10px 14px;border-radius:10px;font-size:13px;margin-top:12px;display:none}
+.v-badge{display:inline-flex;align-items:center;gap:6px;background:#1E293B;border:1px solid #334155;color:#94A3B8;padding:5px 12px;border-radius:99px;font-size:12px;font-weight:700;margin-bottom:12px}
+.v-badge.on{background:#052E1B;border-color:#10B981;color:#34D399}
 .tools{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
 .tool{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px;cursor:pointer;transition:.2s}
 .tool:hover{border-color:var(--coral);box-shadow:0 8px 24px rgba(255,107,91,.1)}
@@ -203,16 +211,61 @@ footer p{font-size:14px}
     <p>Tekan mic, ngomong langsung — Preppy dengerin dan balas pake suara. Kayak teleponan sama tutor, bukan ketik-ketik.</p>
   </div>
   <div class="voicebox" id="vBox">
+    <div class="v-badge" id="vModeBadge">📱 Mode Telepon — obrolan terus-menerus</div>
     <div class="v-stage">
       <div class="v-ring"></div>
-      <div class="v-avatar">🎓</div>
+      <svg class="v-person" id="vPerson" viewBox="0 0 180 200" xmlns="http://www.w3.org/2000/svg">
+        <!-- shoulders / body -->
+        <path d="M20 200 Q25 155 90 150 Q155 155 160 200 Z" fill="#1E3A5F"/>
+        <path d="M55 200 Q60 165 90 162 Q120 165 125 200 Z" fill="#FF6B5B"/>
+        <!-- neck -->
+        <rect x="78" y="128" width="24" height="28" rx="10" fill="#E8A87C"/>
+        <!-- face -->
+        <ellipse cx="90" cy="95" rx="52" ry="58" fill="#F0B892"/>
+        <!-- ears -->
+        <ellipse cx="37" cy="100" rx="10" ry="14" fill="#E8A87C"/>
+        <ellipse cx="143" cy="100" rx="10" ry="14" fill="#E8A87C"/>
+        <!-- hair -->
+        <path d="M38 90 Q35 30 90 28 Q145 30 142 90 Q140 55 90 50 Q40 55 38 90 Z" fill="#2D1B12"/>
+        <path d="M40 70 Q50 40 90 38 Q130 40 140 70 Q125 48 90 46 Q55 48 40 70 Z" fill="#3D2817"/>
+        <!-- eyebrows -->
+        <path id="browL" d="M52 78 Q65 72 78 77" stroke="#2D1B12" stroke-width="4" fill="none" stroke-linecap="round"/>
+        <path id="browR" d="M102 77 Q115 72 128 78" stroke="#2D1B12" stroke-width="4" fill="none" stroke-linecap="round"/>
+        <!-- eyes whites -->
+        <ellipse cx="65" cy="95" rx="14" ry="11" fill="#fff"/>
+        <ellipse cx="115" cy="95" rx="14" ry="11" fill="#fff"/>
+        <!-- pupils -->
+        <g id="pupils">
+          <circle id="pupL" cx="67" cy="96" r="6" fill="#1A1A2E"/>
+          <circle id="pupR" cx="117" cy="96" r="6" fill="#1A1A2E"/>
+          <circle cx="69" cy="94" r="2" fill="#fff"/>
+          <circle cx="119" cy="94" r="2" fill="#fff"/>
+        </g>
+        <!-- eyelids (blink) -->
+        <g id="lids" opacity="0">
+          <ellipse cx="65" cy="95" rx="15" ry="12" fill="#F0B892"/>
+          <ellipse cx="115" cy="95" rx="15" ry="12" fill="#F0B892"/>
+          <path d="M50 95 Q65 88 80 95" stroke="#E8A87C" stroke-width="2" fill="none"/>
+          <path d="M100 95 Q115 88 130 95" stroke="#E8A87C" stroke-width="2" fill="none"/>
+        </g>
+        <!-- nose -->
+        <path d="M90 100 Q95 115 88 118" stroke="#D4926B" stroke-width="3" fill="none" stroke-linecap="round"/>
+        <!-- mouth: closed smile -->
+        <path id="mouthClosed" d="M70 132 Q90 146 110 132" stroke="#C4574A" stroke-width="4" fill="none" stroke-linecap="round"/>
+        <!-- mouth: open (talking) -->
+        <ellipse id="mouthOpen" cx="90" cy="134" rx="18" ry="12" fill="#8B2E2E"/>
+        <path id="teeth" d="M74 128 Q90 124 106 128" stroke="#fff" stroke-width="5" fill="none" stroke-linecap="round" opacity="0"/>
+        <!-- cheeks blush -->
+        <ellipse cx="50" cy="115" rx="10" ry="6" fill="#F5A08A" opacity=".55"/>
+        <ellipse cx="130" cy="115" rx="10" ry="6" fill="#F5A08A" opacity=".55"/>
+      </svg>
       <div class="v-waves"><i></i><i></i><i></i><i></i><i></i></div>
     </div>
-    <div class="v-status" id="vStatus">Tekan tombol mic buat mulai ngobrol</div>
+    <div class="v-status" id="vStatus">Tekan mic buat mulai telepon</div>
     <div class="v-live" id="vLive"></div>
     <button class="v-mic" id="vMic" onclick="toggleVoice()" aria-label="Mic">🎤</button>
-    <div class="v-hint" id="vHint">Izin mikrofon diminta saat pertama kali · Bicara Indonesia atau English</div>
-    <label class="v-auto"><input type="checkbox" id="vAuto" checked> Lanjut otomatis setelah Preppy selesai ngomong</label>
+    <div class="v-hint" id="vHint">Setelah nyala, obrolan jalan terus — Preppy dengerin &amp; jawab otomatis</div>
+    <label class="v-auto"><input type="checkbox" id="vAuto" checked> 📞 Telepon terus-menerus (otomatis lanjut)</label>
     <div class="v-err" id="vErr"></div>
   </div>
   <div class="chat-log" id="log" style="max-width:560px;margin:16px auto 0;background:#0F172A;border:1px solid #1E293B;border-radius:16px">
@@ -335,11 +388,16 @@ function rmTyping(){const t=document.getElementById('typing');if(t)t.remove()}
 
 function quick(t){inp.value=t;send()}
 
-// ── VOICE: state machine ──
+// ── VOICE: state machine + face anim ──
 const vBox=document.getElementById('vBox'),vStatus=document.getElementById('vStatus'),
       vLive=document.getElementById('vLive'),vMic=document.getElementById('vMic'),
-      vErr=document.getElementById('vErr'),vAuto=document.getElementById('vAuto');
-let vState='idle',rec=null,voices=[];
+      vErr=document.getElementById('vErr'),vAuto=document.getElementById('vAuto'),
+      vBadge=document.getElementById('vModeBadge');
+const mouthClosed=document.getElementById('mouthClosed'),mouthOpen=document.getElementById('mouthOpen'),
+      teeth=document.getElementById('teeth'),lids=document.getElementById('lids'),
+      browL=document.getElementById('browL'),browR=document.getElementById('browR'),
+      pupL=document.getElementById('pupL'),pupR=document.getElementById('pupR');
+let vState='idle',rec=null,voices=[],onCall=false,mouthRaf=null,blinkTimer=null;
 const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
 
 function setV(s,txt,live){
@@ -347,10 +405,52 @@ function setV(s,txt,live){
   vBox.className='voicebox'+(s==='idle'?'':' '+s);
   if(txt)vStatus.textContent=txt;
   vLive.textContent=live||'';
-  vMic.textContent=s==='listening'?'⏹':(s==='speaking'?'🔊':'🎤');
+  vMic.textContent=onCall?'📵':(s==='listening'?'⏹':(s==='speaking'?'🔊':'🎤'));
   vErr.style.display='none';
+  // face expressions
+  if(s==='speaking'){startMouth();browL.setAttribute('d','M52 76 Q65 70 78 75');browR.setAttribute('d','M102 75 Q115 70 128 76');}
+  else{stopMouth();mouthClosed.style.opacity='1';mouthOpen.style.opacity='0';teeth.style.opacity='0';
+    if(s==='listening'){browL.setAttribute('d','M52 76 Q65 70 78 75');browR.setAttribute('d','M102 75 Q115 70 128 76');pupL.setAttribute('cy','96');pupR.setAttribute('cy','96');}
+    else if(s==='thinking'){browL.setAttribute('d','M52 80 Q65 74 78 77');browR.setAttribute('d','M102 77 Q115 74 128 80');pupL.setAttribute('cy','90');pupR.setAttribute('cy','90');}
+    else{browL.setAttribute('d','M52 78 Q65 72 78 77');browR.setAttribute('d','M102 77 Q115 72 128 78');pupL.setAttribute('cy','96');pupR.setAttribute('cy','96');}
+  }
+  if(onCall){vBadge.textContent='📞 Telepon aktif — obrolan jalan terus';vBadge.classList.add('on');}
+  else{vBadge.textContent='📱 Mode Telepon — obrolan terus-menerus';vBadge.classList.remove('on');}
 }
 function vErrShow(t){vErr.textContent='⚠️ '+t;vErr.style.display='block'}
+
+// mouth talking animation
+function startMouth(){
+  stopMouth();
+  let t=0;
+  const tick=()=>{
+    t+=0.18;
+    const open=(Math.sin(t)*0.5+0.5)*(0.55+Math.sin(t*2.7)*0.35);
+    mouthClosed.style.opacity='0';
+    mouthOpen.style.opacity='1';
+    teeth.style.opacity=open>0.4?'1':'0';
+    mouthOpen.setAttribute('ry',String(4+open*14));
+    mouthOpen.setAttribute('rx',String(14+open*6));
+    mouthRaf=requestAnimationFrame(tick);
+  };
+  mouthRaf=requestAnimationFrame(tick);
+}
+function stopMouth(){
+  if(mouthRaf)cancelAnimationFrame(mouthRaf);
+  mouthRaf=null;
+  mouthClosed.style.opacity='1';
+  mouthOpen.style.opacity='0';
+  teeth.style.opacity='0';
+}
+// blink loop
+function blinkLoop(){
+  const delay=2200+Math.random()*3200;
+  blinkTimer=setTimeout(()=>{
+    lids.style.opacity='1';
+    setTimeout(()=>{lids.style.opacity='0';blinkLoop()},140);
+  },delay);
+}
+blinkLoop();
 
 function loadVoices(){
   voices=window.speechSynthesis?speechSynthesis.getVoices():[];
@@ -375,7 +475,11 @@ function speak(text){
     u.lang=(v&&v.lang)||'id-ID';
     u.rate=1.02;u.pitch=1.05;
     let done=false;
-    const fin=()=>{if(done)return;done=true;res()};
+    const fin=()=>{
+      if(done)return;done=true;
+      stopMouth();
+      res();
+    };
     u.onend=fin;u.onerror=fin;
     setTimeout(fin,Math.min(30000,2000+clean.length*90));
     setV('speaking','Preppy lagi ngomong…');
@@ -384,23 +488,39 @@ function speak(text){
 }
 
 function toggleVoice(){
-  if(vState==='listening'){if(rec)rec.stop();return}
-  if(vState==='thinking'||vState==='speaking')return;
+  if(onCall){endCall();return}
   if(!SR){
-    vErrShow('Browser kamu belum dukung voice. Pakai Chrome terbaru ya. Ketik aja di bawah.');
+    vErrShow('Browser belum dukung voice. Pakai Chrome. Ketik aja di bawah.');
     return;
   }
+  startCall();
+}
+
+function startCall(){
+  onCall=true;
+  vBadge.textContent='📞 Telepon aktif — obrolan jalan terus';
+  vBadge.classList.add('on');
   startRec();
+}
+function endCall(){
+  onCall=false;
+  try{if(rec)rec.stop()}catch(_){}
+  try{if(window.speechSynthesis)speechSynthesis.cancel()}catch(_){}
+  stopMouth();
+  setV('idle','Tekan mic buat mulai telepon');
 }
 
 function startRec(){
+  if(!onCall)return;
   try{if(window.speechSynthesis)speechSynthesis.cancel()}catch(_){}
+  stopMouth();
   if(!rec){
     rec=new SR();
     rec.lang='id-ID';
     rec.interimResults=true;
     rec.maxAlternatives=1;
-    rec.onstart=()=>setV('listening','Mendengarkan… ngomong aja','"…"');
+    rec.continuous=false;
+    rec.onstart=()=>setV('listening','Preppy dengerin… ngomong aja','"…"');
     rec.onresult=(e)=>{
       let interim='',final='';
       for(let i=e.resultIndex;i<e.results.length;i++){
@@ -416,25 +536,33 @@ function startRec(){
     rec.onerror=(e)=>{
       if(e.error==='not-allowed'||e.error==='service-not-allowed'){
         vErrShow('Izin mikrofon ditolak. Izinkan di pengaturan browser, lalu refresh.');
-        setV('idle','Tekan tombol mic buat mulai ngobrol');
+        endCall();
       }else if(e.error==='no-speech'){
-        setV('idle','Gak kedengeran suara — coba tekan mic lagi');
-      }else if(e.error!=='aborted'){
-        vErrShow('Mic error: '+e.error+'. Coba lagi.');
-        setV('idle','Tekan tombol mic buat mulai ngobrol');
+        if(onCall){setV('listening','masih di sini… ngomong lagi kapan aja','…');setTimeout(()=>{if(onCall&&vState==='listening')startRec()},800);}
+        else setV('idle','Gak kedengeran suara — tekan mic lagi');
+      }else if(e.error==='aborted'){
+        // intentional stop
       }else{
-        setV('idle','Tekan tombol mic buat mulai ngobrol');
+        if(onCall){setTimeout(()=>{if(onCall)startRec()},1200);}
+        else{vErrShow('Mic error: '+e.error);setV('idle','Tekan mic buat mulai telepon');}
       }
     };
     rec.onend=()=>{
-      if(vState==='listening')setV('idle','Tekan tombol mic buat mulai ngobrol');
+      if(onCall&&vState==='listening'){
+        // phone mode: keep listening
+        setTimeout(()=>{if(onCall&&vState!=='speaking'&&vState!=='thinking')startRec()},500);
+      }else if(!onCall&&vState==='listening'){
+        setV('idle','Tekan mic buat mulai telepon');
+      }
     };
   }
-  try{rec.start()}catch(_){setV('idle','Tekan tombol mic buat mulai ngobrol')}
+  try{rec.start()}catch(_){
+    setTimeout(()=>{if(onCall)startRec()},600);
+  }
 }
 
 async function handleVoice(text){
-  if(busy)return;
+  if(busy||!onCall)return;
   await send(text,true);
 }
 
@@ -483,23 +611,33 @@ async function send(voiceText,speakIt){
     await typeOut(el,rTxt);
     HIST.push({role:'assistant',content:rTxt});
     await speak(rTxt);
-    if(speakIt){
-      if(vAuto.checked){
-        setV('idle','lanjut ngobrol… tekan mic atau ngomong lagi');
+    if(speakIt||onCall){
+      if(onCall){
+        setV('listening','Preppy dengerin lagi… ngomong lanjut','');
+        await sleep(350);
+        if(onCall&&(vState==='listening'||vState==='idle'))startRec();
+      }else if(vAuto.checked){
+        setV('idle','lanjut ngobrol… tekan mic lagi');
         await sleep(350);
         if(vState==='idle')startRec();
       }else{
-        setV('idle','Tekan tombol mic buat mulai ngobrol');
+        setV('idle','Tekan mic buat lanjut ngobrol');
       }
-    }else{
-      if(vState==='speaking')setV('idle','Tekan tombol mic buat mulai ngobrol');
+    }else if(vState==='speaking'){
+      setV('idle','Tekan mic buat mulai telepon');
     }
   }catch(e){
     rmTyping();
     addMsg('⚠️ '+esc(e.message||'AI lagi sibuk, coba lagi sebentar lagi.'),'a');
-    if(speakIt){
+    if(speakIt||onCall){
       vErrShow(e.message||'AI lagi sibuk, coba lagi.');
-      setV('idle','Tekan tombol mic buat coba lagi');
+      if(onCall){
+        setV('listening','masih nyambung… coba ngomong lagi','');
+        await sleep(1500);
+        if(onCall)startRec();
+      }else{
+        setV('idle','Tekan mic buat coba lagi');
+      }
     }
   }
   busy=false;
